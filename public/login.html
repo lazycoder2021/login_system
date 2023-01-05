@@ -1,0 +1,150 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            font-family: 'Segoe UI';
+            background-color: lawngreen;
+        }
+
+        form {
+            border: 1px solid black;
+            background-color: white;
+            width: 400px;
+            margin: 100px auto;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 15px;
+            border-radius: 8px;
+        }
+
+        label {
+            background-color: white;
+        }
+
+        input {
+            margin-bottom: 10px;
+            margin-top: 5px;
+            outline: none;
+            font-size: 16px;
+            background-color: white;
+            padding: 4px;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 8px 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        p, a {
+            background-color: white;
+            color: black;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .name_err, .email_err, .pass_err, .phone_err, .country_err {
+            background-color: red;
+            text-align: center;
+            color: white;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body onload="noBack();"
+      onpageshow="if (event.persisted) noBack();" onunload="">
+    <form onsubmit="return testform()" method="POST" action="/register">
+        
+        <label for="email">EMAIL</label>
+        <input type="email" class="email" />
+        <span class="email_err hide">error msg</span>
+
+        
+        <button>Get Passcode</button>
+        <p>Don't have an account? <a href="index.html">Register</a></p>
+    </form>
+    <p>Note: The form data gets sanitized first. Only after this, api is invoked to connect with backend route. Used GeeksforGeeks code. </p>
+
+    <script>
+
+        window.history.forward();
+        function noBack() {window.history.forward(); }
+
+
+
+        function testform() {
+            
+            var email =
+                document.querySelector('.email').value;
+
+            
+
+
+
+            var regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g;  //Javascript reGex for Email Validation.
+           
+            
+
+            if (email == "" || !regEmail.test(email)) {
+                document.querySelector('.email_err').classList.remove('hide');
+                document.querySelector('.email_err').innerText = 'Please enter email address properly.';
+
+                document.querySelector('.email').focus()
+                return false;
+            }
+
+            console.log(email)
+
+            
+            fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                })
+            }).then((res) => {
+                return res.json()
+            }).then((data) => {
+                //console.log(data)
+                console.log(data.msg)
+
+                
+
+                if (data.msg = 'Passcode has been sent to your mail. Please use that to login') {
+                    window.location.href = 'success1.html'
+                } else {
+                    window.location.href = 'error.html'
+                }
+
+
+
+            }).catch((e) => {
+                console.log(e)
+            })
+
+            
+
+        }
+
+    </script>
+</body>
+</html>

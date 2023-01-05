@@ -1,0 +1,62 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            font-family: 'Segoe UI';
+            background-color: lawngreen;
+        }
+
+        .container {
+            margin: 300px auto 0px;
+            width: 1000px;
+            font-size: 40px;
+            padding: 10px;
+            color: white;
+            text-align: center;
+            
+        }
+
+        button{
+            padding:10px 15px;
+            background-color:black;
+            color:white; 
+            cursor:pointer; 
+        }
+    </style>
+</head>
+<body onload="noBack();"
+      onpageshow="if (event.persisted) noBack();" onunload="">
+    <div class="container">
+        Welcome to Dashboard<br/>
+        <button class="logout">SIGN OUT</button>
+    </div>
+
+    <SCRIPT type="text/javascript">
+	window.history.forward();
+        function noBack() { window.history.forward(); }
+
+
+        document.querySelector('.logout').addEventListener('click', function () {
+            //alert('hi')
+            fetch('http://localhost:3000/logout')
+                .then((res) => {
+                    return res.json(); 
+                })
+                .then((data) => {
+                    console.log(data)
+                    if (data.msg == 'session destroyed successfully') {
+                        window.location.href = 'index.html'
+                    }
+                })
+        })
+    </SCRIPT>
+</body>
+</html>

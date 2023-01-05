@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            font-family: 'Segoe UI';
+            background-color: lawngreen;
+        }
+
+        .container{
+            
+            margin:300px auto 0px; 
+            width:1000px;
+            
+            font-size:40px;
+            padding:10px;
+            color:white; 
+            text-align:center; 
+        }
+    </style>
+</head>
+<body onload="noBack();" 
+	onpageshow="if (event.persisted) noBack();" onunload="">
+    <div class="container">
+        That email already exists in our database! Were you trying to login?
+    </div>
+
+    <SCRIPT type="text/javascript">
+	window.history.forward();
+	function noBack() { window.history.forward(); }
+    </SCRIPT>
+</body>
+</html>

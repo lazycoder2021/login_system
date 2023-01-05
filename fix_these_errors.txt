@@ -1,0 +1,3 @@
+1. check if email alreadys exists and inform the same 
+
+3. prevent repeating verify and pass codes [instead say 'you have already verified or logged in'] 

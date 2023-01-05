@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        *{
+            margin:0px;
+            padding:0px;
+            box-sizing:border-box;
+            font-family: 'Segoe UI'; 
+            background-color:lawngreen;
+        }
+
+        form{
+            border:1px solid black;
+            background-color:white; 
+            width:400px;
+            margin:100px auto;
+            display:flex;
+            flex-direction:column;
+            padding:25px 15px;
+            border-radius:8px;
+        }
+
+        label {
+            background-color: white;
+        }
+
+        input{
+            margin-bottom:10px;
+            margin-top:5px;
+            outline:none; 
+            font-size:16px;
+            background-color:white; 
+            padding:4px;
+            
+        }
+
+        button{
+            font-size:16px;
+            padding:8px 5px;
+            text-transform:uppercase;
+            cursor:pointer;
+        }
+
+        p {
+            text-align: center;
+            margin-top:5px;
+        }
+
+        p, a{
+            background-color:white;
+            color:black;
+             
+        }
+
+        .hide{
+            display:none; 
+        }
+
+        .name_err, .email_err, .pass_err, .phone_err, .country_err{
+            background-color:red;
+            text-align:center; 
+            color:white; 
+            margin-bottom:3px;
+        }
+    </style>
+</head>
+<body onload="noBack();" 
+	onpageshow="if (event.persisted) noBack();" onunload="">
+    <form onsubmit="return testform()" method="POST" action="/register">
+        <label for="name">NAME</label>
+        <input type="text" class="name" />
+        <span class="name_err hide">error msg</span>
+        <label for="email">EMAIL</label>
+        <input type="email" class="email" />
+        <span class="email_err hide">error msg</span>
+        
+        <span class="pass_err hide">error msg</span>
+        <label for="phone">PHONE</label>
+        <input type="number" class="phone" />
+        <span class="phone_err hide">error msg</span>
+        <label for="country">COUNTRY</label>
+        <input type="text" class="country" />
+        <span class="country_err hide">error msg</span>
+        <button>Register</button>
+        <p>Already have an account? <a href="login.html">Sign In</a></p>
+    </form>
+    <center><a href="project.html"><button style="margin-top:20px;background:black;color:white;">Login System -- Brief Description</button></a></center>
+    <script>
+        
+        window.history.forward();
+        function noBack() {window.history.forward(); }
+    
+
+
+        function testform() {
+            var name =
+                document.querySelector('.name').value;
+            var email =
+                document.querySelector('.email').value;
+            
+            var phone =
+                document.querySelector('.phone').value;
+            var country =
+                document.querySelector('.country').value;
+
+
+
+            var regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g;  //Javascript reGex for Email Validation.
+            var regPhone = /^\d{10}$/;                                        // Javascript reGex for Phone Number validation.
+            var regName = /\d+$/g;                                    // Javascript reGex for Name validation
+
+            if (name == "" || regName.test(name)) {
+                
+                document.querySelector('.name_err').classList.remove('hide');
+                document.querySelector('.name_err').innerText = 'Please enter your name properly.';
+                
+                document.querySelector('.name').focus()
+                return false;
+            }
+
+            if (email == "" || !regEmail.test(email)) {
+                document.querySelector('.email_err').classList.remove('hide');
+                document.querySelector('.email_err').innerText = 'Please enter email address properly.';
+
+                document.querySelector('.email').focus()
+                return false;
+            }
+
+            
+
+        
+            
+            if (phone == "" || !regPhone.test(phone)) {
+                document.querySelector('.phone_err').classList.remove('hide');
+                document.querySelector('.phone_err').innerText = 'Please enter valid phone number';
+                //alert("Please enter valid phone number.");
+                document.querySelector('.phone').focus()
+                return false;
+            }
+
+            if (country == "") {
+                document.querySelector('.country_err').classList.remove('hide');
+                document.querySelector('.country_err').innerText = 'Please enter your country';
+                document.querySelector('.country').focus()
+                return false;
+            }
+
+            console.log(name + email + phone + country)
+
+            
+            fetch('http://localhost:3000/register', {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json', 
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email, 
+                    phone: phone,
+                    country: country
+                })
+            }).then((res) => {
+                return res.json()
+            }).then((data) => {
+                //console.log(data)
+                console.log(data.msg)
+                /*
+                if (data.msg = 'email already exists!') {
+                    window.location.href = 'exists.html'
+                } */
+                
+                if (data.msg = 'Verification email has been sent. Please check your inbox and verify your email to complete registration') {
+                    window.location.href = 'success.html'
+                } else {
+                    window.location.href = 'error.html'
+                }
+                
+                
+            }).catch((e) => {
+                console.log(e)
+            })
+            
+
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h2>about this project</h2>
+
+    <ol>Form gets santizied first. Api call gets through only after sanitization.</ol>
+    <ol>Verification codes (for both registration and login) are generated using UUID npm package. (The codes generated are long ones, but you also have other packages which deliver short codes).</ol>
+    <ol>Session based verification is used. So when the user successfully reproduces the code, his or her user id is associated with req.session object and subsequently disassociated when he or she logs out. So though it does not use tokens or passport, the auth system is fairly decent one -- just like the verification codes.</ol>
+    <ol>JS code to disable browser back button has been included in most of the pages. Though you can still access the page (by noting down the url path and reproducing the same), in case of forms, the previous data is not retained, because the back button has been disabled.</ol>
+    <ol>Using trim() method to trim the verification code input, so that even it there are spaces while copying the long code, they get ignored.</ol>
+    <ol>Handled errors to certain extent. Errors are shown when user enters the wrong code.</ol>
+    <ol>User will be able to register/login only when he or she reproduces the correct code.</ol>
+    <ol>Send grid API was used for triggering verification mails</ol>
+
+    <p>Issues</p>
+    <ol>For now, the system does not prevent the already registered user from reproducing the verifiction code again and again (to complete the registration process). </ol>
+    <ol>For now, the system does not prevent the already loggedin user from reproducing the verifiction code again and again (to complete the Login process). </ol>
+    <ol>For some reason, having issues with checking whether the user trying to register is already in the database or not. Though this is something I have done before.</ol>
+
+</body>
+</html>

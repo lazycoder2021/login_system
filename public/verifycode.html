@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .hide{
+            display:none; 
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            font-family: 'Segoe UI';
+            background-color: lawngreen;
+        }
+
+        .container, .msg {
+            margin: 300px auto 0px;
+            width: 1000px;
+            font-size: 30px;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        input{
+            width:200px;
+            padding:3px;
+            font-size:16px;
+        }
+
+        button{
+            padding:5px;
+            cursor:pointer; 
+            background:black;
+            color:white; 
+        }
+
+        .buttons{
+            margin-left:700px;
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body onload="noBack();" 
+	onpageshow="if (event.persisted) noBack();" onunload="">
+    <div class="container">
+        <form>
+            <h2>Enter Your Verification Code</h2>
+            <input type="text" class="code" placeholder="Enter your verification code" />
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="msg"></div>
+    <div class="buttons">
+        <button class="btn hide">Go to Home Page</button>
+        
+    </div>
+
+    <script>
+
+        window.history.forward();
+        function noBack() { window.history.forward(); }
+
+
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log(document.querySelector('.code').value)
+            fetch('http://localhost:3000/verifycode', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: document.querySelector('.code').value.trim()
+                })
+
+            }).then((res) => {
+                return res.json()
+            }).then((data) => {
+                console.log(data)
+                document.querySelector('.container').classList.add('hide');
+                document.querySelector('form').classList.add('hide');
+                document.querySelector('.msg').innerHTML = data.msg;
+                if (data.msg == 'verification unsuccessful, please check your verifiction code') {
+                    document.querySelector('.btn').classList.add('hide');
+                    
+                } else if (data.msg == 'verification successful, you can now access the site') {
+                    document.querySelector('.btn').classList.remove('hide');
+                    
+                } else {
+                    alert('something went wrong')
+                }
+                
+
+
+                
+
+
+            }).catch((e) => {
+                console.log(e)
+            })
+        })
+
+        document.querySelector('.btn').addEventListener('click', function () {
+            //alert('hi...')
+
+            fetch('http://localhost:3000/access')
+                .then((res) => {
+                    return res.json()
+                })
+                .then((data) => {
+                    if (data.msg == 'you have not verified your registration, please verify') {
+                        window.location.href = 'errorpage.html'
+                    } else {
+                        window.location.href = 'newpage.html'
+                    }
+
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        })
+
+    </script>
+</body>
+</html>
